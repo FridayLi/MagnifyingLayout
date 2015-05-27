@@ -4,6 +4,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.datayes.magnifying.TextSelectionView;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -12,6 +16,14 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        TextSelectionView text = (TextSelectionView)findViewById(R.id.text);
+        text.setText(TextContent.content);
+        text.setWordSelectListener(new TextSelectionView.WordSelectListener() {
+            @Override
+            public void onWordSelected(String word) {
+                Toast.makeText(MainActivity.this,"Select word: " + word,Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
