@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 
 /**
  * Created by quandong.li on 2015/5/27.
@@ -18,7 +19,7 @@ public class MagnifyGlass extends View{
     private Bitmap bitmap;
     private static final float FACTOR = 1.3f;
     private Paint mPaint = new Paint();
-
+    private MagnifyingLayout mMagnifyingLayout;
     public MagnifyGlass(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
@@ -34,6 +35,10 @@ public class MagnifyGlass extends View{
         init();
     }
 
+    public void setMagnifyingLayout(MagnifyingLayout layout) {
+        mMagnifyingLayout = layout;
+    }
+
     private void init() {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
@@ -45,7 +50,9 @@ public class MagnifyGlass extends View{
 
         if(bitmap == null || bitmap.isRecycled()) {
             Log.e(TAG, "onDraw bitmap is null or recycled");
-            postInvalidateDelayed(100);
+            if (mMagnifyingLayout != null) {
+                mMagnifyingLayout.invalidate();
+            }
             return;
         }
         canvas.drawBitmap(bitmap, matrix, mPaint);
