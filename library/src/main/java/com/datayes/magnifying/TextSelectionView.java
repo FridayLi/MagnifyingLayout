@@ -65,13 +65,15 @@ public class TextSelectionView extends EditText {
         case MotionEvent.ACTION_UP:
         	int start = getSelectionStart();
         	int end = getSelectionEnd();
-            String selectedWord = getText().subSequence(start, end).toString();
-        	Log.v("test", "getSelectionStart = " + start + ",getSelectionEnd = " + end
-                    + ",selected text = " + selectedWord);
-            if (mWordSelectListener != null) {
-                mWordSelectListener.onWordSelected(selectedWord);
+            if(start > 0 && end > 0 && start <= end) {
+                String selectedWord = getText().subSequence(start, end).toString();
+                Log.v("test", "getSelectionStart = " + start + ",getSelectionEnd = " + end
+                        + ",selected text = " + selectedWord);
+                if (mWordSelectListener != null) {
+                    mWordSelectListener.onWordSelected(selectedWord);
+                }
+                Selection.removeSelection(getEditableText());
             }
-            Selection.removeSelection(getEditableText());
         	break;
         }  
         return true;  

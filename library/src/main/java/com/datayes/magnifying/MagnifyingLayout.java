@@ -59,7 +59,8 @@ public class MagnifyingLayout extends RelativeLayout{
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
 //		Log.w(TAG, "dispatchTouchEvent : " + ev.getAction());
-        if(mShowMagnifyGlass && ev.getAction() == MotionEvent.ACTION_MOVE) {
+        if(mShowMagnifyGlass && (ev.getAction() == MotionEvent.ACTION_MOVE
+                || ev.getAction() == MotionEvent.ACTION_UP)) {
             dispatchTouchEventToTextView(this, ev);
         }
         handleTouchEvent(ev);
@@ -197,7 +198,7 @@ public class MagnifyingLayout extends RelativeLayout{
         return null;
     }
 
-    private  Bitmap createBitmapAndGcIfNecessary(int width, int height) {
+    private Bitmap createBitmapAndGcIfNecessary(int width, int height) {
         try {
             return Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         } catch (OutOfMemoryError e) {
@@ -223,6 +224,7 @@ public class MagnifyingLayout extends RelativeLayout{
         vibrator.vibrate(pattern,-1);
 
         mMagnifyGlass = new MagnifyGlass(getContext());
+        mMagnifyGlass.setMagnifyingLayout(this);
         mMagnifyGlass.setBackgroundResource(R.drawable.glass_frame);
         LayoutParams params = new LayoutParams(MAGNIFY_GLASS_WIDTH, MAGNIFY_GLASS_HEIGHT);
         mMagnifyGlass.setTranslationX(mTouchDownX - OFFSET_X);
