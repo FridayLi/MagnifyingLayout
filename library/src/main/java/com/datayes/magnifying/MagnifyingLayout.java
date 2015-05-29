@@ -77,11 +77,17 @@ public class MagnifyingLayout extends RelativeLayout{
                     || !isTouchInView(x, y, child)) {
                 continue;
             }
+            final MotionEvent transformedEvent = MotionEvent.obtain(ev);
+            final float offsetX = group.getScrollX() - child.getLeft();
+            final float offsetY = group.getScrollY() - child.getTop();
+            transformedEvent.offsetLocation(offsetX, offsetY);
+//            Log.d(TAG,"dispatchTouchEventToTextView group = " + group +",transformedEvent Y = " + transformedEvent.getY());
             if(child instanceof ViewGroup) {
-                dispatchTouchEventToTextView((ViewGroup)child, ev);
+                dispatchTouchEventToTextView((ViewGroup) child, transformedEvent);
             } else if(child instanceof TextView){
-                dispatchTransformedTouchEvent(ev, child);
+                dispatchTransformedTouchEvent(transformedEvent, child);
             }
+            transformedEvent.recycle();
         }
     }
 
@@ -103,13 +109,7 @@ public class MagnifyingLayout extends RelativeLayout{
         if (child == null) {
             handled = super.dispatchTouchEvent(event);
         } else {
-            final float offsetX = getScrollX() - child.getLeft();
-            final float offsetY = getScaleY() - child.getTop();
-            event.offsetLocation(offsetX, offsetY);
-
             handled = child.dispatchTouchEvent(event);
-
-            event.offsetLocation(-offsetX, -offsetY);
         }
         return handled;
     }
@@ -118,7 +118,7 @@ public class MagnifyingLayout extends RelativeLayout{
         if(event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
             touchCancel();
         } else if(event.getAction() == MotionEvent.ACTION_DOWN) {
-            Log.v(TAG, "dispatchTouchEvent ACTION_DOWN : " + event + ",getY = " + event.getY());
+//            Log.v(TAG, "dispatchTouchEvent ACTION_DOWN : " + event + ",getY = " + event.getY());
             mTouchDownX = event.getX();
             mTouchDownY = event.getY();
         } else if(event.getAction() == MotionEvent.ACTION_MOVE && mMagnifyGlass != null) {

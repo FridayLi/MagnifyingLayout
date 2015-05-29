@@ -82,7 +82,8 @@ public class TextSelectionView extends EditText {
     private void selectWord(MotionEvent event) {
     	Layout layout = getLayout();
     	int length = getText().length();
-    	int line = layout.getLineForVertical(getScrollY()+(int)event.getY());   
+//        Log.d("test","selectWord getScrollY = " + getScrollY() +",event.getY() = " + event.getY());
+    	int line = layout.getLineForVertical(getScrollY()+(int)event.getY());
         int selectPostion = layout.getOffsetForHorizontal(line, (int)event.getX());
         int leftOffset = selectPostion;
         int rightOffset = selectPostion;
