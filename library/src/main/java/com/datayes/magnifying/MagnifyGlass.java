@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 
 /**
  * Created by quandong.li on 2015/5/27.
@@ -17,9 +16,11 @@ public class MagnifyGlass extends View{
     private static final String TAG = MagnifyGlass.class.getSimpleName();
     private Matrix matrix = new Matrix();
     private Bitmap bitmap;
-    private static final float FACTOR = 1.3f;
+    private float scaleFactor = 1.3f;
     private Paint mPaint = new Paint();
     private MagnifyingLayout mMagnifyingLayout;
+    private float mCurrentX;
+    private float mCurrentY;
     public MagnifyGlass(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
@@ -44,6 +45,14 @@ public class MagnifyGlass extends View{
         mPaint.setAntiAlias(true);
     }
 
+    public float getScaleFactor() {
+        return scaleFactor;
+    }
+
+    public void setScaleFactor(float scaleFactor) {
+        this.scaleFactor = scaleFactor;
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -58,9 +67,16 @@ public class MagnifyGlass extends View{
         canvas.drawBitmap(bitmap, matrix, mPaint);
     }
 
-    public void move(float x, float y) {
-        matrix.setTranslate(0-x, 0-y);
-        matrix.postScale(FACTOR, FACTOR);
+    public boolean move(float x, float y) {
+        if (Math.abs(x-mCurrentX) < 1 && Math.abs(y-mCurrentY) < 1) {
+            return false;
+        }
+        mCurrentX = x;
+        mCurrentY = y;
+        matrix.setTranslate(0 - x, 0 - y);
+        matrix.postScale(scaleFactor, scaleFactor);
+        matrix.postTranslate(mMagnifyingLayout.getGlassWidth() / 2, mMagnifyingLayout.getGlassHeight() / 2);
+        return true;
     }
 
     public void drawMagnifyContent(Bitmap b) {

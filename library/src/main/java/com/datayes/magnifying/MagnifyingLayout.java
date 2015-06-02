@@ -3,7 +3,6 @@ package com.datayes.magnifying;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Vibrator;
 import android.util.AttributeSet;
@@ -19,10 +18,10 @@ import android.widget.TextView;
  */
 public class MagnifyingLayout extends RelativeLayout{
     private static final String TAG = MagnifyingLayout.class.getSimpleName();
-    private static final int MAGNIFY_GLASS_WIDTH = 500;
-    private static final int MAGNIFY_GLASS_HEIGHT = 150;
-    private static final int OFFSET_X = MAGNIFY_GLASS_WIDTH/2;
-    private static final int OFFSET_Y = MAGNIFY_GLASS_HEIGHT + 130;
+    private int glassWidth = 600;
+    private int glassHeight = 200;
+    private int offsetX;
+    private int offsetY;
 
     private boolean mShowMagnifyGlass;
     private MagnifyGlass mMagnifyGlass;
@@ -44,6 +43,14 @@ public class MagnifyingLayout extends RelativeLayout{
     public MagnifyingLayout(Context context) {
         super(context);
         init();
+    }
+
+    public int getGlassWidth() {
+        return glassWidth;
+    }
+
+    public int getGlassHeight() {
+        return glassHeight;
     }
 
     @Override
@@ -138,6 +145,8 @@ public class MagnifyingLayout extends RelativeLayout{
     }
 
     private void init() {
+        offsetX = glassWidth /2;
+        offsetY = glassHeight + 130;
         setClickable(true);
         setOnLongClickListener(new OnLongClickListener() {
             @Override
@@ -226,16 +235,16 @@ public class MagnifyingLayout extends RelativeLayout{
         mMagnifyGlass = new MagnifyGlass(getContext());
         mMagnifyGlass.setMagnifyingLayout(this);
         mMagnifyGlass.setBackgroundResource(R.drawable.glass_frame);
-        LayoutParams params = new LayoutParams(MAGNIFY_GLASS_WIDTH, MAGNIFY_GLASS_HEIGHT);
-        mMagnifyGlass.setTranslationX(mTouchDownX - OFFSET_X);
-        mMagnifyGlass.setTranslationY(mTouchDownY - OFFSET_Y);
+        LayoutParams params = new LayoutParams(glassWidth, glassHeight);
+        mMagnifyGlass.setTranslationX(mTouchDownX - offsetX);
+        mMagnifyGlass.setTranslationY(mTouchDownY - offsetY);
 
         addView(mMagnifyGlass, params);
         moveMagnifyGlass(mTouchDownX, mTouchDownY);
     }
 
     private void dismissMagnifyGlass() {
-        Log.d(TAG,"dismissMagnifyGlass");
+        Log.d(TAG, "dismissMagnifyGlass");
         if(!mShowMagnifyGlass) {
             return;
         }
@@ -246,10 +255,12 @@ public class MagnifyingLayout extends RelativeLayout{
 
     private void moveMagnifyGlass(float x, float y) {
         Log.d(TAG,"moveMagnifyGlass");
-        mMagnifyGlass.setTranslationX(x - OFFSET_X);
-        mMagnifyGlass.setTranslationY(y - OFFSET_Y);
-        mMagnifyGlass.move(x-MAGNIFY_GLASS_WIDTH/2, y-MAGNIFY_GLASS_HEIGHT/2);
-        invalidate();
+        mMagnifyGlass.setTranslationX(x - offsetX);
+        mMagnifyGlass.setTranslationY(y - offsetY);
+        boolean needInvalidate = mMagnifyGlass.move(x, y);
+        if (needInvalidate) {
+            invalidate();
+        }
     }
 
     private static boolean canViewReceiveTouchEvents(View child) {
