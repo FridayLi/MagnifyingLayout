@@ -7,6 +7,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.datayes.magnifying.MagnifyingLayout;
+import com.datayes.magnifying.MagnifyingLayoutConfiguration;
 import com.datayes.magnifying.TextSelectionView;
 
 
@@ -17,6 +19,8 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         TextSelectionView text = (TextSelectionView)findViewById(R.id.text);
+        MagnifyingLayout container = (MagnifyingLayout)findViewById(R.id.container);
+        container.initConfiguration(MagnifyingLayoutConfiguration.createDefault());
         text.setText(TextContent.content);
         text.setWordSelectListener(new TextSelectionView.WordSelectListener() {
             @Override

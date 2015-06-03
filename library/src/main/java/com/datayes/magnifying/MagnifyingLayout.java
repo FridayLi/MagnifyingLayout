@@ -18,8 +18,8 @@ import android.widget.TextView;
  */
 public class MagnifyingLayout extends RelativeLayout{
     private static final String TAG = MagnifyingLayout.class.getSimpleName();
-    private int glassWidth = 600;
-    private int glassHeight = 200;
+    private int glassWidth;
+    private int glassHeight;
     private int offsetX;
     private int offsetY;
 
@@ -145,8 +145,6 @@ public class MagnifyingLayout extends RelativeLayout{
     }
 
     private void init() {
-        offsetX = glassWidth /2;
-        offsetY = glassHeight + 130;
         setClickable(true);
         setOnLongClickListener(new OnLongClickListener() {
             @Override
@@ -157,6 +155,12 @@ public class MagnifyingLayout extends RelativeLayout{
         });
     }
 
+    public void initConfiguration(MagnifyingLayoutConfiguration config) {
+        glassWidth = config.glassWidth;
+        glassHeight = config.glassHeight;
+        offsetX = glassWidth/2;
+        offsetY = glassHeight + config.padding;
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
