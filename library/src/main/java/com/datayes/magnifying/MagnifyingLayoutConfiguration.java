@@ -1,5 +1,7 @@
 package com.datayes.magnifying;
 
+import android.graphics.Color;
+
 /**
  * Created by quandong.li on 2015/6/2.
  */
@@ -12,6 +14,10 @@ public class MagnifyingLayoutConfiguration {
     public static final int DEFAULT_PADDING = 150;
 
     public static final float DEFAULT_SCALE_FACTOR = 1.3f;
+
+    public static final int DEFAULT_GLASS_BORDER_WIDTH = 15;
+
+    public static final int DEFAULT_GLASS_BORDER_COLOR = Color.YELLOW;
 
     /**
      * magnify glass width
@@ -30,11 +36,17 @@ public class MagnifyingLayoutConfiguration {
      */
     final float scaleFactor;
 
+    final int glassBorderWidth;
+
+    final int glassBorderColor;
+
     private MagnifyingLayoutConfiguration(Builder builder) {
         glassWidth = builder.glassWidth;
         glassHeight = builder.glassHeight;
         padding = builder.padding;
         scaleFactor = builder.scaleFactor;
+        glassBorderWidth = builder.glassBorderWidth;
+        glassBorderColor = builder.glassBorderColor;
     }
 
     public static MagnifyingLayoutConfiguration createDefault() {
@@ -46,6 +58,8 @@ public class MagnifyingLayoutConfiguration {
         private int glassHeight = DEFAULT_GLASS_HEIGHT;
         private int padding = DEFAULT_PADDING;
         private float scaleFactor = DEFAULT_SCALE_FACTOR;
+        private int glassBorderWidth = DEFAULT_GLASS_BORDER_WIDTH;
+        private int glassBorderColor = DEFAULT_GLASS_BORDER_COLOR;
 
         public Builder() {
 
@@ -66,6 +80,15 @@ public class MagnifyingLayoutConfiguration {
             scaleFactor = scale;
             return this;
         }
+
+        public void setGlassBorderWidth(int glassBorderWidth) {
+            this.glassBorderWidth = glassBorderWidth;
+        }
+
+        public void setGlassBorderColor(int glassBorderColor) {
+            this.glassBorderColor = glassBorderColor;
+        }
+
         public MagnifyingLayoutConfiguration build() {
             return new MagnifyingLayoutConfiguration(this);
         }

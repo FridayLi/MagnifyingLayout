@@ -29,6 +29,7 @@ public class MagnifyingLayout extends RelativeLayout{
     private float mTouchDownY;
 
     private Bitmap mRenderBitmap;
+    private MagnifyingLayoutConfiguration mConfig;
 
     public MagnifyingLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -156,6 +157,7 @@ public class MagnifyingLayout extends RelativeLayout{
     }
 
     public void initConfiguration(MagnifyingLayoutConfiguration config) {
+        mConfig = config;
         glassWidth = config.glassWidth;
         glassHeight = config.glassHeight;
         offsetX = glassWidth/2;
@@ -238,7 +240,8 @@ public class MagnifyingLayout extends RelativeLayout{
 
         mMagnifyGlass = new MagnifyGlass(getContext());
         mMagnifyGlass.setMagnifyingLayout(this);
-        mMagnifyGlass.setBackgroundResource(R.drawable.glass_frame);
+        mMagnifyGlass.initConfiguration(mConfig);
+        mMagnifyGlass.setBackgroundResource(R.drawable.glass_border);
         LayoutParams params = new LayoutParams(glassWidth, glassHeight);
         mMagnifyGlass.setTranslationX(mTouchDownX - offsetX);
         mMagnifyGlass.setTranslationY(mTouchDownY - offsetY);

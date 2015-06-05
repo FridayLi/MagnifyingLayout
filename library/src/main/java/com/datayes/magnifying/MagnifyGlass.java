@@ -2,9 +2,15 @@ package com.datayes.magnifying;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Xfermode;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -16,8 +22,9 @@ public class MagnifyGlass extends View{
     private static final String TAG = MagnifyGlass.class.getSimpleName();
     private Matrix matrix = new Matrix();
     private Bitmap bitmap;
-    private float scaleFactor = 1.3f;
-    private Paint mPaint = new Paint();
+    private float scaleFactor;
+    private Paint mPaint;
+    private Paint mBorderPaint;
     private MagnifyingLayout mMagnifyingLayout;
     private float mCurrentX;
     private float mCurrentY;
@@ -43,6 +50,19 @@ public class MagnifyGlass extends View{
     private void init() {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
+
+        mBorderPaint = new Paint();
+        mBorderPaint.setAntiAlias(true);
+        mBorderPaint.setStyle(Paint.Style.STROKE);
+        PorterDuffXfermode mode = new PorterDuffXfermode(PorterDuff.Mode.SRC_IN);
+        mBorderPaint.setXfermode(mode);
+
+    }
+
+    public void initConfiguration(MagnifyingLayoutConfiguration config) {
+        scaleFactor = config.scaleFactor;
+        mBorderPaint.setStrokeWidth(config.glassBorderWidth);
+        mBorderPaint.setColor(config.glassBorderColor);
     }
 
     public float getScaleFactor() {
@@ -65,6 +85,11 @@ public class MagnifyGlass extends View{
             return;
         }
         canvas.drawBitmap(bitmap, matrix, mPaint);
+        drawBorder(canvas);
+    }
+
+    private void drawBorder(Canvas canvas) {
+        canvas.drawRect(0, 0, (float) getWidth(), (float) getHeight(), mBorderPaint);
     }
 
     public boolean move(float x, float y) {
