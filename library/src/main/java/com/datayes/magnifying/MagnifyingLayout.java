@@ -237,7 +237,6 @@ public class MagnifyingLayout extends RelativeLayout{
         mMagnifyGlass = new MagnifyGlass(getContext());
         mMagnifyGlass.setMagnifyingLayout(this);
         mMagnifyGlass.initConfiguration(mConfig);
-        mMagnifyGlass.setBackgroundResource(R.drawable.glass_border);
         LayoutParams params = new LayoutParams(glassWidth, glassHeight);
         mMagnifyGlass.setTranslationX(mTouchDownX - offsetX);
         mMagnifyGlass.setTranslationY(mTouchDownY - offsetY);
