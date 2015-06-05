@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.os.Vibrator;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -189,7 +188,6 @@ public class MagnifyingLayout extends RelativeLayout{
         renderCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
         super.dispatchDraw(renderCanvas);
         canvas.drawBitmap(renderBitmap, 0, 0, null);
-        Log.i(TAG,"dispatchDrawUsingBitmap mMagnifyGlass = " + mMagnifyGlass);
         if(mMagnifyGlass != null) {
             mMagnifyGlass.drawMagnifyContent(renderBitmap);
         }
@@ -223,12 +221,10 @@ public class MagnifyingLayout extends RelativeLayout{
     }
 
     private void touchCancel() {
-        Log.i(TAG, "touch cancel");
         dismissMagnifyGlass();
     }
 
     private void showMagnifyGlass() {
-        Log.d(TAG,"showMagnifyGlass");
         if(mShowMagnifyGlass) {
             return;
         }
@@ -251,7 +247,6 @@ public class MagnifyingLayout extends RelativeLayout{
     }
 
     private void dismissMagnifyGlass() {
-        Log.d(TAG, "dismissMagnifyGlass");
         if(!mShowMagnifyGlass) {
             return;
         }
@@ -261,7 +256,6 @@ public class MagnifyingLayout extends RelativeLayout{
     }
 
     private void moveMagnifyGlass(float x, float y) {
-        Log.d(TAG,"moveMagnifyGlass");
         mMagnifyGlass.setTranslationX(x - offsetX);
         mMagnifyGlass.setTranslationY(y - offsetY);
         boolean needInvalidate = mMagnifyGlass.move(x, y);

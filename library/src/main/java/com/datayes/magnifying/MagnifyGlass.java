@@ -1,18 +1,12 @@
 package com.datayes.magnifying;
-
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.Xfermode;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 /**
@@ -78,7 +72,7 @@ public class MagnifyGlass extends View{
         super.onDraw(canvas);
 
         if(bitmap == null || bitmap.isRecycled()) {
-            Log.e(TAG, "onDraw bitmap is null or recycled");
+//            Log.e(TAG, "onDraw bitmap is null or recycled");
             if (mMagnifyingLayout != null) {
                 mMagnifyingLayout.invalidate();
             }
@@ -105,7 +99,6 @@ public class MagnifyGlass extends View{
     }
 
     public void drawMagnifyContent(Bitmap b) {
-        Log.d(TAG,"drawMagnifyContent bitmap = " + b);
         bitmap = b;
         invalidate();
     }

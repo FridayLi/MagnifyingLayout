@@ -67,8 +67,8 @@ public class TextSelectionView extends EditText {
         	int end = getSelectionEnd();
             if(start > 0 && end > 0 && start <= end) {
                 String selectedWord = getText().subSequence(start, end).toString();
-                Log.v("test", "getSelectionStart = " + start + ",getSelectionEnd = " + end
-                        + ",selected text = " + selectedWord);
+//                Log.v("test", "getSelectionStart = " + start + ",getSelectionEnd = " + end
+//                        + ",selected text = " + selectedWord);
                 if (mWordSelectListener != null) {
                     mWordSelectListener.onWordSelected(selectedWord);
                 }
@@ -106,7 +106,7 @@ public class TextSelectionView extends EditText {
         	return;
         }
         Selection.setSelection(getEditableText(), leftOffset, rightOffset);  
-        Log.d("test", "event = " + event.getAction() + ",selection [ " + leftOffset + "," + rightOffset + "]");
+//        Log.d("test", "event = " + event.getAction() + ",selection [ " + leftOffset + "," + rightOffset + "]");
     }
     
     public static boolean isPunctuation(char c) {
