@@ -1,28 +1,26 @@
 package com.datayes.magnifying;
 
 import android.content.Context;  
-import android.graphics.Color;  
-import android.text.Layout;  
-import android.text.Selection;  
+import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.ContextMenu;  
+import android.view.ContextMenu;
 import android.view.Gravity;  
 import android.view.MotionEvent;  
-import android.widget.EditText;  
-import android.widget.TextView;
-   
+import android.widget.EditText;
+
 public class TextSelectionView extends EditText {
 
-    public interface WordSelectListener {
-        void onWordSelected(String word);
+    private TextSelection mTextSelection;
+
+    public interface TextSelectListener {
+        void onTextSelected(String selected);
     }
 
-    private WordSelectListener mWordSelectListener;
+    private TextSelectListener mTextSelectListener;
  
     public TextSelectionView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		initialize(); 
+		initialize();
 	}
 
 	public TextSelectionView(Context context, AttributeSet attrs) {
@@ -35,13 +33,18 @@ public class TextSelectionView extends EditText {
         initialize();  
     }  
   
-    private void initialize() {  
+    private void initialize() {
+        mTextSelection = new WordSelection(this);
         setGravity(Gravity.TOP);  
         setBackgroundColor(Color.WHITE);  
     }
 
-    public void setWordSelectListener(WordSelectListener listener) {
-        mWordSelectListener = listener;
+    public void setTextSelection(TextSelection selection) {
+        mTextSelection = selection;
+    }
+
+    public void setTextSelectListener(TextSelectListener listener) {
+        mTextSelectListener = listener;
     }
       
     @Override  
@@ -60,62 +63,15 @@ public class TextSelectionView extends EditText {
         switch(action) {  
         case MotionEvent.ACTION_DOWN:
         case MotionEvent.ACTION_MOVE:
-        	selectWord(event);
+        	mTextSelection.select(event);
             break;
         case MotionEvent.ACTION_UP:
-        	int start = getSelectionStart();
-        	int end = getSelectionEnd();
-            if(start > 0 && end > 0 && start <= end) {
-                String selectedWord = getText().subSequence(start, end).toString();
-//                Log.v("test", "getSelectionStart = " + start + ",getSelectionEnd = " + end
-//                        + ",selected text = " + selectedWord);
-                if (mWordSelectListener != null) {
-                    mWordSelectListener.onWordSelected(selectedWord);
-                }
-                Selection.removeSelection(getEditableText());
+            if (mTextSelectListener != null) {
+                mTextSelectListener.onTextSelected(mTextSelection.getSelectedText());
             }
         	break;
         }  
         return true;  
     }
-    
-    private void selectWord(MotionEvent event) {
-    	Layout layout = getLayout();
-    	int length = getText().length();
-//        Log.d("test","selectWord getScrollY = " + getScrollY() +",event.getY() = " + event.getY());
-    	int line = layout.getLineForVertical(getScrollY()+(int)event.getY());
-        int selectPostion = layout.getOffsetForHorizontal(line, (int)event.getX());
-        int leftOffset = selectPostion;
-        int rightOffset = selectPostion;
-        while(leftOffset >= 0) {
-        	if(Character.isWhitespace(getText().charAt(leftOffset)) 
-        			|| isPunctuation(getText().charAt(leftOffset))) {
-        		leftOffset++;
-        		break;
-        	}
-        	leftOffset--;
-        }
-        while(rightOffset < length) {
-        	if(Character.isWhitespace(getText().charAt(rightOffset))
-        			|| isPunctuation(getText().charAt(leftOffset))) {
-        		break;
-        	}
-        	rightOffset++;
-        }
-        if(leftOffset > rightOffset) {
-        	return;
-        }
-        Selection.setSelection(getEditableText(), leftOffset, rightOffset);  
-//        Log.d("test", "event = " + event.getAction() + ",selection [ " + leftOffset + "," + rightOffset + "]");
-    }
-    
-    public static boolean isPunctuation(char c) {
-        return c == ','
-            || c == '.'
-            || c == '!'
-            || c == '?'
-            || c == ':'
-            || c == ';'
-            ;
-    }
+
 }  
