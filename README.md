@@ -23,7 +23,7 @@ Include `MagnifyingLayout` in your layout XML.
 </com.datayes.magnifying.MagnifyingLayout>
 ```
 
-In the `onCreate` of your activity/dialog or the `onCreateView` of your fragment, configue the
+In the `onCreate` of your activity or the `onCreateView` of your fragment, configue the
 `MagnifyingLayout`(magnify glass width, magnify glass height glass border color, etc.)
 ```java
 MagnifyingLayout container = (MagnifyingLayout)findViewById(R.id.container);
