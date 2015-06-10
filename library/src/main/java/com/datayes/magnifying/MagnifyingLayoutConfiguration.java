@@ -81,12 +81,14 @@ public class MagnifyingLayoutConfiguration {
             return this;
         }
 
-        public void setGlassBorderWidth(int glassBorderWidth) {
+        public Builder setGlassBorderWidth(int glassBorderWidth) {
             this.glassBorderWidth = glassBorderWidth;
+            return this;
         }
 
-        public void setGlassBorderColor(int glassBorderColor) {
+        public Builder setGlassBorderColor(int glassBorderColor) {
             this.glassBorderColor = glassBorderColor;
+            return this;
         }
 
         public MagnifyingLayoutConfiguration build() {
