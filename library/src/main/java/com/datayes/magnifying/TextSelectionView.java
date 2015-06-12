@@ -12,6 +12,8 @@ public class TextSelectionView extends EditText {
 
     private TextSelection mTextSelection;
 
+    private boolean mSelectable;
+
     public interface TextSelectListener {
         void onTextSelected(String selected);
     }
@@ -58,20 +60,28 @@ public class TextSelectionView extends EditText {
     }  
       
     @Override  
-    public boolean onTouchEvent(MotionEvent event) {  
-        int action = event.getAction();
-        switch(action) {  
-        case MotionEvent.ACTION_DOWN:
-        case MotionEvent.ACTION_MOVE:
-        	mTextSelection.select(event);
-            break;
-        case MotionEvent.ACTION_UP:
-            if (mTextSelectListener != null) {
-                mTextSelectListener.onTextSelected(mTextSelection.getSelectedText());
+    public boolean onTouchEvent(MotionEvent event) {
+        if (mSelectable) {
+            int action = event.getAction();
+            switch(action) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_MOVE:
+                mTextSelection.select(event);
+                break;
+            case MotionEvent.ACTION_UP:
+                if (mTextSelectListener != null) {
+                    mTextSelectListener.onTextSelected(mTextSelection.getSelectedText());
+                }
+                break;
             }
-        	break;
-        }  
-        return true;  
+            return true;
+        } else {
+            return super.onTouchEvent(event);
+        }
+    }
+
+    public void setSelectable(boolean selectable) {
+        mSelectable = selectable;
     }
 
 }  

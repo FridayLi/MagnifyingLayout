@@ -240,8 +240,9 @@ public class MagnifyingLayout extends RelativeLayout{
         LayoutParams params = new LayoutParams(glassWidth, glassHeight);
         mMagnifyGlass.setTranslationX(mTouchDownX - offsetX);
         mMagnifyGlass.setTranslationY(mTouchDownY - offsetY);
-
         addView(mMagnifyGlass, params);
+
+        setTextViewSelectable(this, true);
         moveMagnifyGlass(mTouchDownX, mTouchDownY);
     }
 
@@ -249,9 +250,22 @@ public class MagnifyingLayout extends RelativeLayout{
         if(!mShowMagnifyGlass) {
             return;
         }
+        setTextViewSelectable(this, false);
         mShowMagnifyGlass = false;
         removeView(mMagnifyGlass);
         mMagnifyGlass = null;
+    }
+
+    private void setTextViewSelectable(ViewGroup group, boolean selectable) {
+        int childrenCount = group.getChildCount();
+        for (int i = 0; i < childrenCount; i++) {
+            View view = group.getChildAt(i);
+            if (view instanceof ViewGroup) {
+                setTextViewSelectable((ViewGroup)view, selectable);
+            } else if (view instanceof TextSelectionView) {
+                ((TextSelectionView)view).setSelectable(selectable);
+            }
+        }
     }
 
     private void moveMagnifyGlass(float x, float y) {
